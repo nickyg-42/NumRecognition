@@ -1,0 +1,33 @@
+1. pre-process data 
+    squash pixels to 0-1 and split training / validation
+    MNIST data
+
+    ///////////////////////////////////////////////////////////////////////
+
+2. create network with layers
+
+    Convolutional layer: 
+        This layer applies a set of learnable filters to the input data, producing a set of feature maps. Each filter slides over the input and performs a dot product with a local patch of the input to produce a single output value. You can experiment with different filter sizes and numbers of filters.
+        Filters: 32
+        Kernel: 3x3
+
+    ReLU activation layer: 
+        This layer applies the ReLU (rectified linear unit) function element-wise to the output of the convolutional layer. The ReLU function sets all negative values to zero and leaves all non-negative values unchanged. This introduces non-linearity into the model.
+    
+    Max pooling layer: 
+        This layer downsamples the feature maps produced by the convolutional layer, reducing their spatial size while retaining the most important information. The max pooling operation takes a local patch of the input and outputs the maximum value in that patch. You can experiment with different patch sizes and strides.
+        Pool size: 2x2
+        Stride: 2
+
+    Flatten layer: 
+        This layer flattens the output of the max pooling layer into a 1D vector, which can then be fed into a fully connected layer.
+    
+    Fully connected layer: 
+        This layer applies a matrix multiplication to the input vector, followed by a bias term and an activation function. You can experiment with different numbers of neurons and activation functions.
+
+3. train (initialize weights, compute loss, backpropagate)    
+    Learning rate: .001
+    Batch size: any
+    Epochs: any tbh
+
+4. test

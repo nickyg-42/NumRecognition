@@ -13,14 +13,14 @@ for i in range(28):
         y1 = i * 10
         x2 = x1 + 10
         y2 = y1 + 10
-        grid_canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="black")
+        grid_canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="white")
 
 # function to handle mouse movements on the canvas
 def draw(event):
     x = event.x // 10
     y = event.y // 10
     if x >= 0 and x < 28 and y >= 0 and y < 28:
-        grid_canvas.itemconfig(y * 28 + x + 1, fill="black")
+        grid_canvas.itemconfig(y * 28 + x + 1, fill="black", outline="black")
 
 # bind the canvas to the draw function for mouse movement
 grid_canvas.bind("<B1-Motion>", draw)
@@ -53,7 +53,7 @@ window.geometry("1152x648")
 def clear_grid():
     for i in range(28):
         for j in range(28):
-            grid_canvas.itemconfig(i * 28 + j + 1, fill="white")
+            grid_canvas.itemconfig(i * 28 + j + 1, fill="white",  outline="white")
 
 # start the window loop
 window.mainloop()
