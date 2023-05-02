@@ -25,6 +25,9 @@
     Fully connected layer: 
         This layer applies a matrix multiplication to the input vector, followed by a bias term and an activation function. You can experiment with different numbers of neurons and activation functions.
 
+    Softmax:
+        idk:
+        
 3. train (initialize weights, compute loss, backpropagate)    
     Learning rate: .001
     Batch size: any
