@@ -1,90 +1,75 @@
 import tkinter as tk
-from keras.models import load_model
 import numpy as np
+from PIL import ImageGrab, ImageOps
+from keras.models import load_model
 import tkinter.ttk as ttk
-from PIL import Image
-import math
 
-# create a window
-window = tk.Tk()
-window.title("Draw on the grid")
-window.iconbitmap('code.ico')
-
+# Load the saved model
 model = load_model('model.h5')
 
-# create a canvas with a 28x28 grid of rectangles
-grid_canvas = tk.Canvas(window, width=560, height=560)
+# set up the window
+root = tk.Tk()
+root.title("Drawing Canvas")
 
-for i in range(56):
-    for j in range(56):
-        x1 = j * 10
-        y1 = i * 10
-        x2 = x1 + 10
-        y2 = y1 + 10
-        grid_canvas.create_rectangle(x1, y1, x2, y2, fill="white", outline="white")
+# create the canvas
+canvas_width = 600
+canvas_height = 600
+canvas = tk.Canvas(root, width=canvas_width, height=canvas_height, bg='white')
+canvas.pack()
 
-# function to handle mouse movements on the canvas
+# set up the drawing functionality
+last_x, last_y = None, None
+line_width = 15
+line_color = 'black'
+
 def draw(event):
-    x = math.floor(event.x * 56 / 560)
-    y = math.floor(event.y * 56 / 560)
-    if x >= 0 and x < 56 and y >= 0 and y < 56:
-        grid_canvas.itemconfig(y * 56 + x + 1, fill="black", outline="black")
+    global last_x, last_y
+    if last_x and last_y:
+        canvas.create_line(last_x, last_y, event.x, event.y, width=line_width, fill=line_color, capstyle='round')
+    last_x, last_y = event.x, event.y
 
+def reset(event):
+    global last_x, last_y
+    last_x, last_y = None, None
 
-# bind the canvas to the draw function for mouse movement
-grid_canvas.bind("<B1-Motion>", draw)
-
-# pack the grid canvas in the center of the window
-grid_canvas.pack(side="top", padx=20, pady=20)
-
-# create a frame to hold the buttons
-frame = tk.Frame(window)
-
-# create a label for instructions
-label = tk.Label(frame, text="Draw on the grid using your mouse", font=("Arial", 14))
-label.pack(side="top", pady=10)
-
-# create a button to clear the grid
-clear_button = ttk.Button(frame, text="Clear Grid", command=lambda: clear_grid())
-clear_button.pack(side="left", padx=10)
-
-# create a button to predict the digit
-predict_button = ttk.Button(frame, text="Predict", command=lambda: predict())
-predict_button.pack(side="left", padx=10)
-
-# create a button to close the window
-close_button = ttk.Button(frame, text="Close", command=window.destroy)
-close_button.pack(side="right", padx=10)
-
-# pack the frame in the center of the window
-frame.pack(side="top")
-
-# set the size of the window
-window.geometry("1500x800")
-
-# function to clear the grid
-def clear_grid():
-    for i in range(56):
-        for j in range(56):
-            grid_canvas.itemconfig(i * 56 + j + 1, fill="white",  outline="white")
+def clear_canvas():
+    canvas.delete("all")
 
 def predict():
-    image = np.zeros((56,56))
-    for i in range(56):
-        for j in range(56):
-            if grid_canvas.itemcget(i * 56 + j + 1, "fill") == "black":
-                image[i][j] = 1
+    # Get the image from the canvas
+    x = root.winfo_rootx() + canvas.winfo_x()
+    y = root.winfo_rooty() + canvas.winfo_y()
+    x1 = x + canvas.winfo_width()
+    y1 = y + canvas.winfo_height()
+    img = ImageGrab.grab((x, y, x1, y1)).convert('L')
+    
+    # Resize the image to 28x28 pixels
+    img = img.resize((28, 28))
+    
+    # Normalize the pixel values
+    img = ImageOps.invert(img)
+    img = np.array(img) / 255.0
+    
+    # Reshape the image into a 4D array (batch size, height, width, channels)
+    img = img.reshape((1, 28, 28, 1))
+    
+    # Make a prediction using the model
+    prediction = model.predict(img)
 
-    image = Image.fromarray(image)
-    image = image.resize((28, 28))
-    image = np.array(image)
-    image = image.reshape((1, 28, 28, 1))
+    digit = np.argmax(prediction)
 
-    prediction = model.predict(image)
+    print("Predicted:", digit)
 
-    predicted_digit = np.argmax(prediction)
+# create the clear button
+clear_button = ttk.Button(root, text="Clear Canvas", command=clear_canvas)
+clear_button.pack(side='left', padx=10, pady=10)
 
-    print("Predicted:", predicted_digit)
+# Add the Predict button
+predict_button = ttk.Button(root, text="Predict", command=predict)
+predict_button.pack(side='left', padx=10, pady=10)
 
-# start the window loop
-window.mainloop()
+# Bind the mouse events to the canvas
+canvas.bind('<B1-Motion>', draw)
+canvas.bind('<ButtonRelease-1>', reset)
+
+root.mainloop()
