@@ -1,8 +1,12 @@
 import tkinter as tk
+from keras.models import load_model
+import numpy as np
 
 # create a window
 window = tk.Tk()
 window.title("Draw on the grid")
+
+model = load_model('model.h5')
 
 # create a canvas with a 28x28 grid of rectangles
 grid_canvas = tk.Canvas(window, width=280, height=280)
@@ -39,6 +43,10 @@ label.pack(side="top", pady=10)
 clear_button = tk.Button(frame, text="Clear Grid", command=lambda: clear_grid())
 clear_button.pack(side="left", padx=10)
 
+# create a button to predict the digit
+predict_button = tk.Button(frame, text="Predict", command=lambda: predict())
+predict_button.pack(side="left", padx=10)
+
 # create a button to close the window
 close_button = tk.Button(frame, text="Close", command=window.destroy)
 close_button.pack(side="right", padx=10)
@@ -54,6 +62,21 @@ def clear_grid():
     for i in range(28):
         for j in range(28):
             grid_canvas.itemconfig(i * 28 + j + 1, fill="white",  outline="white")
+
+def predict():
+    image = np.zeros((28,28))
+    for i in range(28):
+        for j in range(28):
+            if grid_canvas.itemcget(i * 28 + j + 1, "fill") == "black":
+                image[i][j] = 1
+
+    image = image.reshape((1,28,28,1))
+
+    prediction = model.predict(image)
+
+    predicted_digit = np.argmax(prediction)
+
+    print("Predicted:", predicted_digit)
 
 # start the window loop
 window.mainloop()

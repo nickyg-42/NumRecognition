@@ -30,7 +30,7 @@
         
 3. train (initialize weights, compute loss, backpropagate)    
     Learning rate: .001
-    Batch size: any
-    Epochs: any tbh
+    Batch size: 64 or 32
+    Epochs: 20
 
 4. test
