@@ -9,3 +9,8 @@ OR
 * Clone the repository
 * Install the requirements using `pip install -r requirements.txt`
 * Run `python main.py` from the project root
+
+
+**MACOS WARNING**: 
+
+I ran into issues installing the `tensorflow` module. In the end, this is the only solution that worked for me (may be improper): `pip install tensorflow-macos`
