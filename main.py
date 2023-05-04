@@ -1,9 +1,10 @@
 import tkinter as tk
 import numpy as np
-from PIL import ImageGrab, ImageOps
+from PIL import ImageGrab, ImageOps, Image
 from keras.models import load_model
 import tkinter.ttk as ttk
 from tkinter.ttk import Style
+import io
 
 # Load the model
 model = load_model('model.h5')
@@ -85,11 +86,10 @@ def predict():
     img = img.reshape((1, 28, 28, 1))
     
     # Make a prediction using the model
-    prediction = model.predict(img)
+    prediction = model.predict(img, verbose = 0)
 
     digit = np.argmax(prediction)
 
-    print("Predicted:", digit)
     output_digit.set(str(digit))
 
 # create the clear button
