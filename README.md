@@ -11,6 +11,6 @@ OR
 * Run `python main.py` from the project root
 
 
-# MACOS WARNING: 
+# MacOS Warning: 
 
 I ran into issues installing the `tensorflow` module. In the end, this is the only solution that worked for me (may be improper): `pip install tensorflow-macos`
