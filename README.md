@@ -8,4 +8,4 @@ OR
 
 * Clone the repository
 * Install the requirements using `pip install -r requirements.txt`
-* Run "python main.py" from the project root
+* Run `python main.py` from the project root
