@@ -40,7 +40,7 @@ def reset(event):
     last_x, last_y = None, None
 
 def clear_canvas():
-    output.set("You drew a: ")
+    output_digit.set(" ")
     canvas.delete("all")
 
 def calculate_canvas_pixel_value(canvas):
@@ -64,8 +64,9 @@ def predict():
 
     # If the pixel value is below the threshold, assume that no digit has been drawn
     if pixel_value > 252:
-        output.set("You drew a: <no digit detected>")
+        output_digit.set("<N/A>")
         return
+    
     # Get the image from the canvas
     x = root.winfo_rootx() + canvas.winfo_x()
     y = root.winfo_rooty() + canvas.winfo_y()
@@ -89,7 +90,7 @@ def predict():
     digit = np.argmax(prediction)
 
     print("Predicted:", digit)
-    output.set("You drew a: " + str(digit))
+    output_digit.set(str(digit))
 
 # create the clear button
 clear_button = ttk.Button(root, text="Clear Canvas", command=clear_canvas, takefocus=False)
@@ -103,8 +104,14 @@ predict_button.pack(side='left', padx=10, pady=10)
 output = tk.StringVar()
 output.set("You drew a: ")
 
-output_label = tk.Label(root, textvariable=output)
+output_label = tk.Label(root, textvariable=output, font=('', 15), bg='#d9d9d9')
 output_label.pack(side='left', padx=10, pady=10)
+
+output_digit = tk.StringVar()
+output_digit.set(" ")
+
+output_digit_label = tk.Label(root, textvariable=output_digit, font=('', 15), bg='white', width=5, height=1)
+output_digit_label.pack(side='left', padx=10, pady=10)
 
 # Bind the mouse events to the canvas
 canvas.bind('<B1-Motion>', draw)
