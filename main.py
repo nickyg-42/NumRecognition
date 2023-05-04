@@ -110,7 +110,7 @@ output_label.pack(side='left', padx=10, pady=10)
 output_digit = tk.StringVar()
 output_digit.set(" ")
 
-output_digit_label = tk.Label(root, textvariable=output_digit, font=('', 15), bg='white', width=5, height=1)
+output_digit_label = tk.Label(root, textvariable=output_digit, font=('', 15), bg='white', fg='black', width=5, height=1)
 output_digit_label.pack(side='left', padx=10, pady=10)
 
 # Bind the mouse events to the canvas
