@@ -4,16 +4,22 @@ from PIL import ImageGrab, ImageOps, Image
 from keras.models import load_model
 import tkinter.ttk as ttk
 from tkinter.ttk import Style
-import io
+import os
+import sys
+
+# change dir
+path = getattr(sys, '_MEIPASS', os.getcwd())   
+os.chdir(path)
 
 # Load the model
-model = load_model('model.h5')
-    
+model = load_model('assets\model.h5')
+icon = 'assets\code.ico'
+
 # set up the window
 root = tk.Tk()
 root.title("MNIST Number Recognition")
 
-root.iconbitmap('code.ico')
+root.iconbitmap(icon)
 
 root.style = Style()
 root.style.theme_use("clam")
