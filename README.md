@@ -1,5 +1,5 @@
 # NumRecognition
-Convolutional Neural Network proof of concept for practice. Trained on MNIST dataset and recognizes handdrawn digits 0-9. Currently relies completely on Keras, but I plan to code the network from scratch.
+Convolutional Neural Network proof of concept for practice. Trained on MNIST dataset and recognizes handdrawn digits 0-9. Currently relies completely on tensorflow libraries, but I plan to independantly create one from scratch in the future.
 
 # Run:
 * Download and run the executable (Windows only)
